@@ -76,11 +76,7 @@ const sha1 = path => new Promise((resolve, reject) => {
 })
 
 const isSourceFile = (filename) => {
-  if (filename.includes('.test.')) {
-    return false;
-  }
-
-  if (filename.includes('test_id')) {
+  if (filename.includes('test')) {
     return false;
   }
 
