@@ -11,7 +11,7 @@ Make sure to setup `process.env.OA` with valid openai API key (also required for
 
 ### Running the search against the provided database
 
-Download the current database file from Releases page and put it into the project root.
+Download current database file from [the releases page](https://github.com/lgestc/security_search/releases) and put it into the project root.
 
 After pulling in the database, run `npm start` at the repository root.
 
