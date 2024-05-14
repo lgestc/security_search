@@ -15,6 +15,8 @@ Download current database file from [the releases page](https://github.com/lgest
 
 After pulling in the database, run `npm start` at the repository root.
 
+Visit `http://localhost:3000` and run your queries.
+
 ### Updating the index (for maintainers only)
 
 Make sure to setup `process.env.TARGET_DIRECTORY` pointing at your local `x-pack/plugins/security_solution`.
