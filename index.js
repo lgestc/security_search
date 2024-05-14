@@ -92,6 +92,14 @@ const isSourceFile = (filename) => {
     return false;
   }
 
+  if (filename.includes('types')) {
+    return false;
+  }
+
+  if (filename.includes('constants')) {
+    return false;
+  }
+
   if (filename.includes('stories')) {
     return false;
   }
@@ -188,17 +196,22 @@ const buildIndex = async (directoryPath) => {
 
   const knownSymbols = DB.prepare('SELECT * FROM symbols').all();
 
+  let outdated = 0;
+
   // NOTE: check if the file does not exist - remove it from the database if its not there
   for (const knownSymbol of knownSymbols) {
     if (checkIfFileExistsInTheFilesystem(directoryPath, knownSymbol.filename)) {
       continue;
     }
 
-    console.info('remove outdated file from the index', knownSymbol.filename)
+    outdated++;
 
     DB.prepare('DELETE FROM embeddings WHERE rowid IN (SELECT rowid FROM symbols WHERE filename = ?)').run(knownSymbol.filename);
+
     DB.prepare('DELETE FROM symbols WHERE filename = ?').run(knownSymbol.filename);
   }
+
+  console.info('cleared ' + outdated + ' outdated symbols');
 
   const files = await traverseFiles(directoryPath);
   const sourceFiles = files.filter(isSourceFile);
