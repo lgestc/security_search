@@ -196,8 +196,8 @@ const buildIndex = async (directoryPath) => {
 
     console.info('remove outdated file from the index', knownSymbol.filename)
 
-    DB.prepare('DELETE FROM symbols WHERE filename = ?').run(knownSymbol.filename);
     DB.prepare('DELETE FROM embeddings WHERE rowid IN (SELECT rowid FROM symbols WHERE filename = ?)').run(knownSymbol.filename);
+    DB.prepare('DELETE FROM symbols WHERE filename = ?').run(knownSymbol.filename);
   }
 
   const files = await traverseFiles(directoryPath);
