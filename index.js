@@ -25,8 +25,8 @@ You should analyze the source code looking at functions, classes and constants a
 Generate output as json array at "symbols" key, where each source code unit is represented as object with the following keys:
 - symbolName - name of the code unit described
 - line - line where the code starts
-- description - short description of what the unit of code does. this description will be turned into embedding,
-  so make it vector search friendly. It should be a markdown text without any nested json.
+- description - short description of what the unit of code does. it should also mention the use case (in one sentence).
+  this description will be turned into embedding, so make it vector search friendly. It should be a markdown text without any nested json.
 `;
 
 const TARGET_DIRECTORY = process.env.TARGET_DIRECTORY; 
@@ -248,6 +248,18 @@ const buildIndex = async (directoryPath) => {
       } 
 
       for (const item of metadata.symbols) {
+        if (item.symbolName.includes('export')) {
+          continue;
+        }
+
+        if (item.symbolName.includes('import')) {
+          continue;
+        }
+
+        if (item.symbolName.includes('interface')) {
+          continue;
+        }
+
         const embedding = await generateEmbedding(item.symbolName + ' ' + item.description);
         console.info('creating new symbols record for ' + relativeFile + ' ' + item.symbolName);
         i++;
